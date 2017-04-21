@@ -20,8 +20,24 @@ class Factory
 	        return self.send(atr) if self.instance_variables.include? "@#{atr}".to_sym
 	        raise NameError, "NameError: No such field"
 	      end
-	  	  rescue  => e
-	  	  	puts e.message
+	  	rescue  => e
+	  	  puts e.message
+	    end
+	  end
+
+	  def []=(atr, val)
+	    begin
+	      if atr.is_a?(Integer)
+	        return @@list[atr] if @@list[atr]
+	        raise IndexError, "IndexError: Wrong index of attributes"
+	      else
+	      	puts "#{atr}="to_sym
+	      	puts val
+	        return self.send(atr) if self.instance_variables.include? "@#{atr}".to_sym
+	        raise NameError, "NameError: No such field"
+	      end
+	  	rescue  => e
+	  	  puts e.message
 	    end
 	  end
 	  block.call if block_given?
@@ -49,3 +65,5 @@ end
  reader = Reader.new("Oleg", "oleg@gmail.ru", "Dnipro")
  reader[2]
  reader.info
+
+ user[:name] = "Bob"
