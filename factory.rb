@@ -4,10 +4,14 @@
 class Factory
   def self.new(*inst_vars, &block)
     Class.new do
-      inst_vars.each{ |a| attr_accessor a } 
+      inst_vars.each do |arg|
+        raise NameError, "identifier #{arg} needs to be constant" unless arg.is_a? Symbol
+        attr_accessor arg
+      end
 
       define_method :initialize do |*val|
-      inst_vars.each_with_index do |key, i|
+        raise ArgumentError if inst_vars.size < val.size
+        inst_vars.each_with_index do |key, i|
           instance_variable_set("@#{key}", val[i])
         end
       end
